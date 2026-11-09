@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio de História — 6º Ano (Sistema Anglo)</title>
+<style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
+   override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+  --success: #0a7a35;
+  --danger: #c0262d;
+  --warning: #8a5300;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+/* Pages generated before the shell had its own components still link the
+   basecoat CDN, which reads its own tokens and switches theme only on a
+   .dark class. Bridged to the shell's, whatever of it those pages use takes
+   the page's accent and follows the declared theme. Its --accent token is a
+   hover tint, renamed in its theme as --color-accent; the shell's --accent is
+   the brand colour, so the tint is derived from it here. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-contrast);
+  --secondary: color-mix(in srgb, var(--text) 7%, var(--surface));
+  --secondary-foreground: var(--text);
+  --muted: color-mix(in srgb, var(--text) 5%, var(--surface));
+  --muted-foreground: var(--text-muted);
+  --color-accent: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --color-accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+* { box-sizing: border-box; }
+/* The reset the pages were written against: they all linked basecoat, which
+   ships Tailwind's. Its components now live here, so the reset does too. */
+*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }
+/* Preflight's rule too: without it a component class that sets display
+   (.alert, .card, .btn…) beats the hidden attribute and shows the element. */
+[hidden]:where(:not([hidden="until-found"])) { display: none !important; }
+.hidden { display: none !important; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: inherit; }
+b, strong { font-weight: bolder; }
+ol, ul, menu { list-style: none; }
+svg, video, canvas, iframe { display: block; vertical-align: middle; }
+button, input, select, textarea { color: inherit; background-color: transparent; border-radius: 0; }
+table { border-collapse: collapse; }
+hr { height: 0; color: inherit; border-top-width: 1px; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: clamp(22px, 2.3vw, 28px); font-weight: 650; line-height: 1.1; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: var(--success); }
+.kpi .kpi-delta.down { color: var(--danger); }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 12px; font-size: 12.5px; color: var(--text-muted); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.chart-legend b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge, .eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+/* A pill keeps its content width inside flex and grid columns, which would
+   otherwise stretch it across the card; a centred parent still centres it. */
+.shell-badge, .eyebrow, .badge { width: fit-content; max-width: 100%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* Layout and type utilities: what the pages kept spelling in style="".
+   Spacing and type sizes follow Tailwind's scale; there is no Tailwind. */
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stack { display: flex; flex-direction: column; gap: var(--space); }
+.between { justify-content: space-between; }
+.grow { flex: 1 1 0; min-width: 0; }
+.cols-2, .cols-3, .cols-4, .cols-5 { display: grid; gap: var(--space); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .cols-2, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) { .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.m-0 { margin: 0; }
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; }
+.text-xs { font-size: 12px; } .text-sm { font-size: 14px; } .text-base { font-size: 16px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 20px; line-height: 1.35; }
+.text-2xl { font-size: 24px; line-height: 1.25; } .text-3xl { font-size: 30px; line-height: 1.2; }
+.font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+.text-right { text-align: right; } .text-center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.w-full { width: 100%; }
+.text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+
+/* Components, with basecoat 1.0 markup (variants and sizes are data
+   attributes) and the shell tokens, so a page needs neither component CSS
+   nor a CSS framework. An older page that also links basecoat gets these
+   rules after it, over the same properties. */
+button, input, select, textarea { font: inherit; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px);
+  background: var(--accent); color: var(--accent-contrast);
+  font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.btn[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.btn[data-variant="secondary"]:hover { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
+.btn[data-variant="outline"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn[data-variant="ghost"] { background: transparent; color: var(--text); }
+.btn[data-variant="outline"]:hover, .btn[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.btn[data-variant="destructive"] { background: var(--danger); color: var(--bg); }
+.btn[data-variant="destructive"]:hover { background: color-mix(in srgb, var(--danger) 86%, var(--text)); }
+.btn[data-variant="link"] { height: auto; padding: 0; background: none; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="sm"] { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn[data-size="lg"] { height: 42px; padding: 0 20px; font-size: 15px; }
+.btn[data-size="icon"] { width: 36px; padding: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 1px solid transparent; border-radius: 999px; background: var(--accent); color: var(--accent-contrast);
+  font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap;
+}
+.badge[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.badge[data-variant="outline"] { background: transparent; color: var(--text); border-color: var(--border); }
+.badge[data-variant="destructive"] { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
+
+.alert {
+  display: grid; gap: 4px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+.alert h2, .alert h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.alert p, .alert section { margin: 0; color: var(--text-muted); }
+.alert[data-variant="destructive"] { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); color: var(--danger); }
+
+.card {
+  display: flex; flex-direction: column; gap: 16px; padding: 20px 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.card > header, .card > section, .card > footer { padding: 0 20px; }
+.card > header { display: grid; gap: 4px; }
+.card > header h2, .card > header h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.3; }
+.card > header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+.card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.input {
+  width: 100%; min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field [role="alert"] { color: var(--danger); font-size: 13px; }
+
+dialog.dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: auto; padding: 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+dialog.dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog.dialog > div { display: grid; gap: 16px; padding: 24px; }
+dialog.dialog header { display: grid; gap: 4px; }
+dialog.dialog header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+dialog.dialog header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+dialog.dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+.tabs { display: grid; gap: 12px; }
+.tabs > [role="tablist"] {
+  display: inline-flex; gap: 4px; width: fit-content; max-width: 100%; padding: 4px; overflow-x: auto;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--text) 6%, var(--surface));
+}
+.tabs [role="tab"] {
+  padding: 6px 12px; border: 0; border-radius: calc(var(--radius) - 4px); background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+.tabs [role="tab"][aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.tabs [role="tabpanel"][hidden] { display: none; }
+
+.accordion > details { border-bottom: 1px solid var(--border); }
+.accordion > details > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; font-weight: 500; list-style: none; cursor: pointer;
+}
+.accordion > details > summary::-webkit-details-marker { display: none; }
+.accordion > details > summary::after { content: "+"; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.accordion > details[open] > summary::after { content: "\2212"; }
+.accordion > details > :not(summary) { margin: 0 0 14px; color: var(--text-muted); }
+
+.toaster {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column-reverse; gap: 8px;
+  width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+.toaster .toast { pointer-events: auto; transition: opacity 200ms ease, transform 200ms ease; }
+.toaster .toast[aria-hidden="true"] { opacity: 0; transform: translateY(8px); }
+.toaster .toast-content {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 13px;
+}
+.toaster .toast-content h2 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+.toaster .toast-content p { margin: 0; color: var(--text-muted); }
+
+/* skipUI building blocks. */
+.skip-table-search { max-width: 320px; margin-bottom: 12px; }
+.skip-table-wrap { overflow-x: auto; }
+table.shell-table th[data-sort] { cursor: pointer; user-select: none; }
+table.shell-table th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 9px; }
+table.shell-table th[aria-sort="descending"]::after { content: " \25BC"; font-size: 9px; }
+table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: center; padding: 24px 0; }
+.skip-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.toaster .toast[data-type="success"] .toast-content { border-left: 3px solid var(--success); }
+.toaster .toast[data-type="error"] .toast-content { border-left: 3px solid var(--danger); }
+
+</style>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); },
+    compact: function (v) { return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(v); },
+    brlCompact: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisLabels formats the five y-axis ticks in the unit the chart declared
+  // (percent, BRL or plain numbers), compact so long values never clip, with
+  // the fewest decimals that still print every tick exactly (1,5 mi, not 2 mi).
+  function axisLabels(format, ticks) {
+    function at(digits) {
+      var opts = { notation: "compact", maximumFractionDigits: digits };
+      if (format === "pct") opts = { style: "percent", maximumFractionDigits: digits };
+      else if (format === "brl") opts = { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: digits };
+      var nf = new Intl.NumberFormat("pt-BR", opts);
+      return ticks.map(function (t) { return nf.format(t); });
+    }
+    for (var digits = 0; digits < 2; digits++) {
+      if (at(digits).join("|") === at(digits + 1).join("|")) return at(digits);
+    }
+    return at(2);
+  }
+
+  // yAxisPad formats the ticks and measures the left padding they need from
+  // the longest one; drawYAxis then draws the grid and the labels.
+  function yAxisPad(format, max) {
+    var labels = axisLabels(format, [0, max / 4, max / 2, (max * 3) / 4, max]);
+    var longest = labels.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
+    return { labels: labels, padL: Math.max(40, Math.round(longest * 6.2) + 14) };
+  }
+  function drawYAxis(svg, axis, W, padR, padT, plotH) {
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: axis.padL, y1: gy, x2: W - padR, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: axis.padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axis.labels[g];
+      svg.appendChild(lbl);
+    }
+  }
+
+  // xLabelStep: show every k-th category label so labels never overlap, and
+  // always the last one (counted back from the end).
+  function xLabelStep(labels, step) {
+    var longest = labels.reduce(function (m, l) { return Math.max(m, String(l).length); }, 0);
+    return Math.max(1, Math.ceil((longest * 6.4 + 8) / Math.max(step, 1)));
+  }
+  function drawXLabel(svg, text, x, y, W, edgeGuard) {
+    var anchor = "middle";
+    var half = String(text).length * 3.2;
+    if (edgeGuard && x - half < 4) anchor = "start";
+    if (edgeGuard && x + half > W - 4) anchor = "end";
+    var tx = svgEl("text", { x: x, y: y, "text-anchor": anchor, "font-size": 11, fill: mutedColor() });
+    tx.textContent = text;
+    svg.appendChild(tx);
+  }
+  // categoryLines fits a bar's category name in its slot: one line, two lines
+  // split at a space, or cut with "…". A bar without its name can't be read, so
+  // categories are never skipped; null when the slot is too narrow for that.
+  function categoryLines(text, slot) {
+    var fit = Math.floor((slot - 6) / 6.4);
+    var s = String(text);
+    if (fit < 4) return null;
+    if (s.length <= fit) return [s];
+    var cut = function (t) { return t.length <= fit ? t : t.slice(0, fit - 1).trimEnd() + "…"; };
+    var best = -1;
+    for (var i = 0; i < s.length; i++) {
+      if (s[i] === " " && (best < 0 || Math.abs(s.length / 2 - i) < Math.abs(s.length / 2 - best))) best = i;
+    }
+    if (best < 0) return [cut(s)];
+    return [cut(s.slice(0, best)), cut(s.slice(best + 1))];
+  }
+  function legend(el, items) {
+    var box = document.createElement("div");
+    box.className = "chart-legend";
+    items.forEach(function (it) {
+      var row = document.createElement("span");
+      var dot = document.createElement("i");
+      dot.style.background = it.color;
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode((it.label || "") + (it.value ? " " : "")));
+      if (it.value) {
+        var v = document.createElement("b");
+        v.textContent = it.value;
+        row.appendChild(v);
+      }
+      box.appendChild(row);
+    });
+    resolve(el).appendChild(box);
+  }
+  var seriesPalette = ["#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4", "#0ea5b7"];
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  // A page's function may return nothing or throw: the chart prints its
+  // number instead of taking the rest of the page script down with it.
+  function coerceFormat(spec) {
+    if (typeof spec === "function") {
+      return function (v) {
+        try {
+          var out = spec(v);
+          return out == null ? "" : String(out);
+        } catch (e) {
+          return fmt.num(v);
+        }
+      };
+    }
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el = resolve(el);
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  // finite reads a chart value as a number, 0 when it is not one (NaN,
+  // Infinity, a stray string), so one bad value cannot blank the axis.
+  function finite(v) {
+    var n = +v;
+    return isFinite(n) ? n : 0;
+  }
+
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values.map(finite)) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // labelsFor pads or trims the category names to the n points drawn: pages
+  // pass labels and values of different lengths, and one throw here loses
+  // every section the page renders after the chart.
+  function labelsFor(cfg, n) {
+    var out = [];
+    for (var i = 0; i < n; i++) out.push(cfg.labels && cfg.labels[i] != null ? String(cfg.labels[i]) : "");
+    return out;
+  }
+
+  // niceMax rounds the scale up so the four grid steps land on round values
+  // (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 × 10^k) and the tick labels read exactly.
+  function niceMax(max) {
+    var raw = max / 4;
+    var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    var res = raw / mag;
+    var steps = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    var nice = steps.filter(function (s) { return s >= res - 1e-9; })[0];
+    return nice * mag * 4;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 12;
+    var max = niceMax(maxOf(cfg.values));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = cfg.values.length;
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var names = labels.map(function (l) { return categoryLines(l, step); });
+    var named = names.every(Boolean);
+    if (named && names.some(function (l) { return l.length > 1; })) padB = 42;
+    var plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    var every = xLabelStep(labels, step);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (finite(v) / max) * plotH);
+      var x = axis.padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: (cfg.colors && cfg.colors[i]) || color });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      if (named) {
+        names[i].forEach(function (text, li) {
+          drawXLabel(svg, text, x + bw / 2, padT + plotH + 18 + li * 13, W, false);
+        });
+      } else if ((n - 1 - i) % every === 0) {
+        drawXLabel(svg, labels[i], x + bw / 2, H - 10, W, false);
+      }
+    });
+  }
+
+  // line(el, {labels:[], values:[] | series:[{label, values, color?}], color?, format?})
+  // — one line, or several series on one scale with a legend under the chart.
+  function line(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 16;
+    var series = cfg.series && cfg.series.length
+      ? cfg.series
+      : [{ label: "", values: cfg.values || [], color: cfg.color }];
+    var all = [];
+    series.forEach(function (s) { all = all.concat(s.values || []); });
+    var max = niceMax(maxOf(all));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = series.reduce(function (m, s) { return Math.max(m, (s.values || []).length); }, 0);
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR, plotH = H - padT - padB;
+    var f = coerceFormat(cfg.format);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    var xs = labels.map(function (_, i) { return axis.padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1)); });
+    var every = xLabelStep(labels, n > 1 ? plotW / (n - 1) : plotW);
+    labels.forEach(function (label, i) {
+      if ((n - 1 - i) % every === 0) drawXLabel(svg, label, xs[i], H - 10, W, true);
+    });
+    var colors = series.map(function (s, si) {
+      return s.color || (si === 0 ? (cfg.color || accent()) : seriesPalette[(si - 1) % seriesPalette.length]);
+    });
+    series.forEach(function (s, si) {
+      var color = colors[si];
+      var pts = (s.values || []).map(function (v, i) { return [xs[i], padT + plotH - (finite(v) / max) * plotH]; });
+      var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+      svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+      pts.forEach(function (p, i) {
+        var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+        var t = svgEl("title", {});
+        t.textContent = (s.label ? s.label + " · " : "") + labels[i] + ": " + f(s.values[i]);
+        c.appendChild(t);
+        svg.appendChild(c);
+      });
+    });
+    if (series.length > 1) {
+      legend(el, series.map(function (s, si) { return { label: s.label, color: colors[si] }; }));
+    }
+  }
+
+  // donut(el, {labels:[], values:[], colors?, format?, center?, centerLabel?, legend?})
+  // — donut with a short total in the centre (compact, in the declared unit)
+  // and, with legend: true, the labels and shares listed under it.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    // At 100% of a wide container the donut outgrows the height pages give
+    // the box and spills over the next section: keep it at its own size.
+    svg.style.maxWidth = W + "px";
+    svg.style.margin = "0 auto";
+    var values = cfg.values.map(finite);
+    var labels = labelsFor(cfg, values.length);
+    var sum = values.reduce(function (a, b) { return a + b; }, 0);
+    var total = sum || 1;
+    var palette = cfg.colors || [accent()].concat(seriesPalette);
+    // The hover keeps the full value; the centre has room for a short one.
+    var full = coerceFormat(cfg.format);
+    var short = typeof cfg.format === "function" ? full : cfg.format === "brl" ? fmt.brlCompact : fmt.compact;
+    var a0 = -Math.PI / 2;
+    values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + full(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    // A share chart has no total worth printing: without its own centre text
+    // the caption alone takes the middle.
+    var text = cfg.center != null ? String(cfg.center) : (cfg.format === "pct" ? "" : short(sum));
+    if (text) {
+      var size = text.length > 9 ? 14 : text.length > 7 ? 17 : 20;
+      var center = svgEl("text", { x: cx, y: cfg.centerLabel ? cy + 1 : cy + 6, "text-anchor": "middle", "font-size": size, "font-weight": 650, fill: "currentColor" });
+      center.textContent = text;
+      svg.appendChild(center);
+    }
+    if (cfg.centerLabel) {
+      var cap = svgEl("text", { x: cx, y: text ? cy + 19 : cy + 5, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      cap.textContent = cfg.centerLabel;
+      svg.appendChild(cap);
+    }
+    if (cfg.legend) {
+      legend(el, labels.map(function (label, i) {
+        return { label: label, color: palette[i % palette.length], value: fmt.pct(values[i] / total) };
+      }));
+    }
+  }
+
+  // ---- Page building blocks: what dashboards and small systems kept
+  // re-implementing — a searchable sortable table, a KPI row, tabs, toasts,
+  // dialogs, saved state and mock data. Every call is opt-in, so a page that
+  // brings its own versions keeps them.
+
+  function resolve(target) {
+    return typeof target === "string" ? document.querySelector(target) : target;
+  }
+
+  function node(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function isNumberColumn(col) {
+    return col.align === "right" || col.format === "num" || col.format === "brl" || col.format === "pct";
+  }
+
+  function cellText(col, row) {
+    var value = row[col.key];
+    if (value == null) return "";
+    return col.format ? coerceFormat(col.format)(value) : String(value);
+  }
+
+  function compareValues(a, b) {
+    if (typeof a === "number" && typeof b === "number") return a - b;
+    return String(a == null ? "" : a).localeCompare(String(b == null ? "" : b), "pt-BR", { numeric: true });
+  }
+
+  // table(el, {columns, rows, search?, pageSize?, empty?, onRowClick?}) — a
+  // table.shell-table with sortable headers, an optional search box and
+  // pager. A column is {key, label, format?, align?, sortable? (true),
+  // render?(value, row) returning a Node or an HTML string — the page writes
+  // its cell templates as markup}. Plain values are always set as text.
+  // Returns {setRows, rows}.
+  function table(target, cfg) {
+    var root = resolve(target);
+    var cols = cfg.columns || [];
+    var pageSize = cfg.pageSize || 0;
+    var state = { rows: (cfg.rows || []).slice(), query: "", key: null, dir: 1, page: 0 };
+    root.innerHTML = "";
+    if (cfg.search) {
+      var search = node("input", "input skip-table-search");
+      search.type = "search";
+      search.placeholder = typeof cfg.search === "string" ? cfg.search : "Buscar…";
+      search.setAttribute("aria-label", search.placeholder);
+      search.addEventListener("input", function () {
+        state.query = search.value.trim().toLowerCase();
+        state.page = 0;
+        draw();
+      });
+      root.appendChild(search);
+    }
+    var tableEl = node("table", "shell-table");
+    var headRow = node("tr");
+    var heads = cols.map(function (col) {
+      var th = node("th", isNumberColumn(col) ? "num" : "", col.label == null ? col.key : col.label);
+      th.scope = "col";
+      if (col.sortable !== false) {
+        var toggle = function () {
+          state.dir = state.key === col.key ? -state.dir : 1;
+          state.key = col.key;
+          draw();
+        };
+        th.setAttribute("data-sort", col.key);
+        th.tabIndex = 0;
+        th.addEventListener("click", toggle);
+        th.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+      }
+      headRow.appendChild(th);
+      return th;
+    });
+    var thead = node("thead");
+    var tbody = node("tbody");
+    var wrap = node("div", "skip-table-wrap");
+    var pager = node("div", "skip-pager");
+    thead.appendChild(headRow);
+    tableEl.appendChild(thead);
+    tableEl.appendChild(tbody);
+    wrap.appendChild(tableEl);
+    root.appendChild(wrap);
+    if (pageSize) root.appendChild(pager);
+
+    function visibleRows() {
+      var rows = state.rows;
+      if (state.query) {
+        rows = rows.filter(function (row) {
+          return cols.some(function (col) { return cellText(col, row).toLowerCase().indexOf(state.query) >= 0; });
+        });
+      }
+      if (state.key) {
+        var key = state.key, dir = state.dir;
+        rows = rows.slice().sort(function (a, b) { return dir * compareValues(a[key], b[key]); });
+      }
+      return rows;
+    }
+
+    function drawRow(row) {
+      var tr = node("tr");
+      cols.forEach(function (col) {
+        var td = node("td", isNumberColumn(col) ? "num" : "");
+        if (!col.render) {
+          td.textContent = cellText(col, row);
+        } else {
+          var content = col.render(row[col.key], row);
+          if (content instanceof Node) td.appendChild(content);
+          else td.innerHTML = content == null ? "" : String(content);
+        }
+        tr.appendChild(td);
+      });
+      // The row stays a row (no role) and takes focus, so a keyboard reaches
+      // the same action; keys pressed on a control inside a cell are its own.
+      if (cfg.onRowClick) {
+        tr.style.cursor = "pointer";
+        tr.tabIndex = 0;
+        tr.addEventListener("click", function () { cfg.onRowClick(row); });
+        tr.addEventListener("keydown", function (e) {
+          if (e.target !== tr || (e.key !== "Enter" && e.key !== " ")) return;
+          e.preventDefault();
+          cfg.onRowClick(row);
+        });
+      }
+      return tr;
+    }
+
+    function pagerButton(label, disabled, step) {
+      var button = node("button", "btn", label);
+      button.type = "button";
+      button.setAttribute("data-variant", "outline");
+      button.setAttribute("data-size", "sm");
+      button.disabled = disabled;
+      button.addEventListener("click", function () { state.page += step; draw(); });
+      return button;
+    }
+
+    function draw() {
+      var rows = visibleRows();
+      heads.forEach(function (th, i) {
+        if (cols[i].key === state.key) th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      var pages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+      state.page = Math.min(state.page, pages - 1);
+      var shown = pageSize ? rows.slice(state.page * pageSize, (state.page + 1) * pageSize) : rows;
+      tbody.innerHTML = "";
+      if (!shown.length) {
+        var empty = node("td", "skip-table-empty", cfg.empty || "Nenhum registro encontrado.");
+        empty.colSpan = cols.length;
+        tbody.appendChild(node("tr")).appendChild(empty);
+      }
+      shown.forEach(function (row) { tbody.appendChild(drawRow(row)); });
+      if (!pageSize) return;
+      pager.innerHTML = "";
+      var from = rows.length ? state.page * pageSize + 1 : 0;
+      pager.appendChild(node("span", "", from + "–" + Math.min(rows.length, (state.page + 1) * pageSize) + " de " + rows.length));
+      var nav = node("div", "row gap-2");
+      nav.appendChild(pagerButton("Anterior", state.page === 0, -1));
+      nav.appendChild(pagerButton("Próxima", state.page >= pages - 1, 1));
+      pager.appendChild(nav);
+    }
+
+    draw();
+    return {
+      setRows: function (rows) { state.rows = rows.slice(); draw(); },
+      rows: visibleRows
+    };
+  }
+
+  // kpis(el, [{label, value, format?, delta?, hint?}]) — KPI cards in a
+  // responsive grid; delta is a fraction (0.12 renders as ▲ 12%).
+  function kpis(target, items) {
+    var root = resolve(target);
+    root.innerHTML = "";
+    root.classList.add("shell-grid");
+    items.forEach(function (item) {
+      var card = node("div", "panel kpi");
+      card.appendChild(node("span", "kpi-label", item.label));
+      // Large money values go compact ("R$ 27,5 mi"): the full amount does
+      // not fit a KPI card at four per row.
+      var kpiFormat = item.format === "brl" && Math.abs(item.value) >= 1e6 ? fmt.brlCompact : (item.format ? coerceFormat(item.format) : null);
+      card.appendChild(node("span", "kpi-value", kpiFormat ? kpiFormat(item.value) : String(item.value)));
+      if (typeof item.delta === "number") {
+        var up = item.delta >= 0;
+        card.appendChild(node("span", "kpi-delta " + (up ? "up" : "down"), (up ? "▲ " : "▼ ") + fmt.pct(Math.abs(item.delta))));
+      }
+      if (item.hint) card.appendChild(node("span", "kpi-label", item.hint));
+      root.appendChild(card);
+    });
+  }
+
+  // badge(text, variant?) — a .badge node for table cells and lists;
+  // variant is "secondary" | "outline" | "destructive" (default: primary).
+  function badge(text, variant) {
+    var el = node("span", "badge", text);
+    if (variant) el.setAttribute("data-variant", variant);
+    return el;
+  }
+
+  // tabs(el) — wires one .tabs block: [role=tab] buttons inside
+  // [role=tablist], each with aria-controls naming its [role=tabpanel].
+  function tabs(target) {
+    var root = resolve(target);
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(chosen) {
+      buttons.forEach(function (b) {
+        var on = b === chosen;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(b.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+      });
+    });
+    select(buttons.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || buttons[0]);
+  }
+
+  // toast(message, {type?: "success" | "error", title?, duration?}) — a
+  // .toast in a shared .toaster at the bottom of the page.
+  function toast(message, opts) {
+    opts = opts || {};
+    var toaster = document.querySelector(".toaster") || document.body.appendChild(node("div", "toaster"));
+    var item = node("div", "toast");
+    item.setAttribute("role", opts.type === "error" ? "alert" : "status");
+    item.setAttribute("aria-hidden", "true");
+    if (opts.type) item.setAttribute("data-type", opts.type);
+    var content = node("div", "toast-content");
+    var section = node("section");
+    if (opts.title) section.appendChild(node("h2", "", opts.title));
+    section.appendChild(node("p", "", message));
+    content.appendChild(section);
+    item.appendChild(content);
+    toaster.appendChild(item);
+    requestAnimationFrame(function () { item.setAttribute("aria-hidden", "false"); });
+    setTimeout(function () {
+      item.setAttribute("aria-hidden", "true");
+      setTimeout(function () { item.remove(); }, 400);
+    }, opts.duration || 3000);
+  }
+
+  // Dialogs are native <dialog class="dialog">: a [data-dialog-open="id"]
+  // anywhere opens one, a [data-dialog-close] inside closes it, and a click on
+  // its backdrop closes it too. Plain dialog.showModal()/close() still work.
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!(target instanceof Element)) return;
+    var opener = target.closest("[data-dialog-open]");
+    if (opener) {
+      var dialog = document.getElementById(opener.getAttribute("data-dialog-open"));
+      if (dialog && dialog.showModal && !dialog.open) dialog.showModal();
+      return;
+    }
+    var closer = target.closest("[data-dialog-close]");
+    if (closer && closer.closest("dialog")) {
+      closer.closest("dialog").close();
+      return;
+    }
+    if (target.tagName === "DIALOG" && target.classList.contains("dialog") && target.open) target.close();
+  });
+
+  // store(key, fallback) — JSON state in localStorage that never throws (a
+  // private window or a full quota falls back to memory): {get, set, update}.
+  function store(key, fallback) {
+    var memory;
+    // Set while the last write did not reach localStorage: what is stored
+    // there is older than memory until a write goes through again.
+    var unsaved = false;
+    var initial = function () { return fallback === undefined ? undefined : JSON.parse(JSON.stringify(fallback)); };
+    function get() {
+      if (!unsaved) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (raw != null) return JSON.parse(raw);
+        } catch (e) { /* storage unavailable: memory below */ }
+      }
+      return memory !== undefined ? memory : initial();
+    }
+    function set(value) {
+      memory = value;
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        unsaved = false;
+      } catch (e) {
+        unsaved = true;
+      }
+      return value;
+    }
+    return { get: get, set: set, update: function (fn) { return set(fn(get())); } };
+  }
+
+  // mock — seeded random data, so a page asks for 90 days of numbers in one
+  // line instead of writing them out; the same seed gives the same data.
+  var FIRST = ["Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+    "Larissa", "Marcos", "Natália", "Otávio", "Paula", "Rafael", "Sofia", "Thiago", "Vanessa", "Lucas"];
+  var LAST = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima",
+    "Araújo", "Fernandes", "Carvalho", "Gomes", "Martins", "Rocha", "Ribeiro", "Barbosa"];
+  var INITIALS = "ABCDEFGHIJLMNOPRSTV".split("");
+  var CITIES = ["São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", "Curitiba, PR", "Porto Alegre, RS",
+    "Salvador, BA", "Recife, PE", "Fortaleza, CE", "Brasília, DF", "Goiânia, GO", "Campinas, SP", "Florianópolis, SC",
+    "Manaus, AM", "Belém, PA", "Vitória, ES", "Natal, RN"];
+
+  function createMock(seed) {
+    var state = seed >>> 0;
+    var names = 0;
+    function random() {
+      state = (state + 0x6d2b79f5) >>> 0;
+      var t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function int(min, max) { return min + Math.floor(random() * (max - min + 1)); }
+    function pick(list) { return list[Math.floor(random() * list.length)]; }
+    var mock = {
+      seed: function (value) { state = value >>> 0; names = 0; return mock; },
+      random: random,
+      int: int,
+      float: function (min, max, decimals) {
+        var factor = Math.pow(10, decimals == null ? 2 : decimals);
+        return Math.round((min + random() * (max - min)) * factor) / factor;
+      },
+      pick: pick,
+      chance: function (p) { return random() < p; },
+      // There are 360 first/last pairs. A page that draws until the name is
+      // new (do { … } while (used.has(name))) froze the tab past them, so
+      // later draws widen the space: a second surname after 200 (6,480), a
+      // middle initial after 4,000.
+      name: function () {
+        names++;
+        var middle = names > 4000 ? pick(INITIALS) + ". " : "";
+        return pick(FIRST) + " " + middle + (names > 200 ? pick(LAST) + " " : "") + pick(LAST);
+      },
+      city: function () { return pick(CITIES); },
+      // series(n, {start, trend, noise, min, decimals}) — a walk: each value
+      // moves by trend (fraction per step) plus up to ±noise of itself.
+      series: function (n, opts) {
+        opts = opts || {};
+        var value = opts.start == null ? 100 : opts.start;
+        var factor = Math.pow(10, opts.decimals || 0);
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          out.push(Math.max(opts.min == null ? 0 : opts.min, Math.round(value * factor) / factor));
+          value = value * (1 + (opts.trend || 0)) * (1 + (random() * 2 - 1) * (opts.noise == null ? 0.08 : opts.noise));
+        }
+        return out;
+      },
+      // dates(n, {end?, step?: "day" | "week" | "month"}) — ISO dates
+      // (YYYY-MM-DD), oldest first, ending at end (default: today).
+      dates: function (n, opts) {
+        opts = opts || {};
+        var end = opts.end ? new Date(opts.end) : new Date();
+        var out = [];
+        for (var i = n - 1; i >= 0; i--) {
+          var d = new Date(end.getTime());
+          if (opts.step === "month") d.setMonth(d.getMonth() - i);
+          else d.setDate(d.getDate() - i * (opts.step === "week" ? 7 : 1));
+          out.push(d.toISOString().slice(0, 10));
+        }
+        return out;
+      },
+      // rows(n, spec) — n objects; each spec value is a function(i), a list
+      // to pick from, or a constant.
+      rows: function (n, spec) {
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          var row = {};
+          for (var key in spec) {
+            var value = spec[key];
+            row[key] = typeof value === "function" ? value(i) : Array.isArray(value) ? pick(value) : value;
+          }
+          out.push(row);
+        }
+        return out;
+      }
+    };
+    return mock;
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+  window.skipUI = { table: table, kpis: kpis, badge: badge, tabs: tabs, toast: toast };
+  window.skipStore = store;
+  window.skipMock = createMock(20261022);
+})();
+
+</script>
+<style>
+:root{
+  --primary:#1F4E5F; --primary-light:#2A6478; --bg:#f0f7f9; --card-bg:#ffffff;
+  --text:#1e293b; --border:#cbd5e1;
+  --correct-bg:#dcfce7; --correct-border:#22c55e; --correct-text:#15803d;
+  --wrong-bg:#fee2e2; --wrong-border:#ef4444; --wrong-text:#b91c1c;
+  --hint-bg:#fef3c7; --hint-border:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:12px;}
+.quiz-container{width:100%;max-width:540px;background:var(--card-bg);border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:20px;display:flex;flex-direction:column;gap:14px;}
+.header{display:flex;align-items:center;gap:12px;}
+.header-icon{font-size:2.2rem;}
+.header-info h1{font-size:1.35rem;color:var(--primary);font-weight:700;}
+.header-info p{font-size:.85rem;color:#64748b;}
+.progress-box{display:flex;flex-direction:column;gap:6px;}
+.progress-bar-bg{height:8px;background:#e2e8f0;border-radius:10px;overflow:hidden;}
+.progress-bar-fill{height:100%;width:0%;background:var(--primary-light);transition:width .3s ease;}
+.progress-stats{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600;color:#64748b;}
+.tag{align-self:flex-start;background:#e0eef2;color:#1F4E5F;border:1px solid #b8d4dc;padding:4px 10px;border-radius:15px;font-size:.8rem;font-weight:600;}
+.review-tag{align-self:flex-start;background:#fef3c7;color:#78350f;border:1px solid #f59e0b;padding:4px 10px;border-radius:15px;font-size:.8rem;font-weight:600;}
+.question-text{font-size:.98rem;font-weight:700;color:var(--primary);line-height:1.4;white-space:pre-line;}
+.options-container{display:flex;flex-direction:column;gap:8px;}
+.option-btn{background:#fff;border:2px solid var(--border);border-radius:12px;padding:12px 14px;text-align:left;font-size:.88rem;color:var(--text);cursor:pointer;display:block;width:100%;line-height:1.35;min-height:44px;transition:background-color .2s,border-color .2s;}
+.option-btn:active{background-color:#f1f5f9;}
+.option-btn.correct{background-color:var(--correct-bg)!important;border-color:var(--correct-border)!important;color:var(--correct-text)!important;font-weight:600;}
+.option-btn.wrong{background-color:var(--wrong-bg)!important;border-color:var(--wrong-border)!important;color:var(--wrong-text)!important;}
+.footer-hint-section{margin-top:4px;display:flex;flex-direction:column;gap:6px;}
+.hint-btn{background:transparent;border:none;color:#d97706;font-weight:600;font-size:.85rem;cursor:pointer;text-align:left;padding:2px 0;display:inline-block;}
+.hint-box{background:var(--hint-bg);border:1px solid var(--hint-border);color:#78350f;padding:10px 12px;border-radius:10px;font-size:.85rem;line-height:1.35;display:none;}
+.feedback-box{padding:12px;border-radius:10px;font-size:.88rem;line-height:1.35;display:none;}
+.feedback-box.correct{background:var(--correct-bg);border:1px solid var(--correct-border);color:var(--correct-text);}
+.feedback-box.wrong{background:var(--wrong-bg);border:1px solid var(--wrong-border);color:var(--wrong-text);}
+.feedback-box strong{display:block;margin-bottom:4px;}
+.action-btn{background:#0f172a;color:#fff;border:none;border-radius:12px;padding:14px;font-size:.95rem;font-weight:700;cursor:pointer;width:100%;text-align:center;margin-top:6px;}
+.action-btn.secondary{background:#fff;border:2px solid var(--primary);color:var(--primary);}
+.action-btn.primary-teal{background:var(--primary);color:#fff;}
+.action-btn:disabled{opacity:.5;cursor:not-allowed;}
+.results-screen{text-align:center;display:none;flex-direction:column;gap:16px;padding:10px 0;}
+.score-circle{width:130px;height:130px;border-radius:50%;background:var(--primary-light);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto;font-size:1.8rem;font-weight:800;}
+.score-circle span{font-size:.75rem;font-weight:400;}
+.part-summary{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;text-align:left;font-size:.85rem;line-height:1.5;color:#334155;}
+.part-summary strong{color:var(--primary);}
+.review-screen{display:none;flex-direction:column;gap:14px;}
+.review-title{font-size:1.2rem;color:var(--primary);font-weight:700;}
+.review-sub{font-size:.85rem;color:#64748b;}
+.module-summary{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.module-summary h3{font-size:.95rem;color:var(--primary);font-weight:700;}
+.mod-row{display:flex;flex-direction:column;gap:4px;}
+.mod-row-head{display:flex;justify-content:space-between;font-size:.8rem;color:#334155;font-weight:600;}
+.mod-row-head .badge{color:#1F4E5F;font-size:.72rem;font-weight:700;}
+.mod-bar-bg{height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;}
+.mod-bar-fill{height:100%;border-radius:4px;background:#8fb8c4;}
+.mod-bar-fill.top{background:#1F4E5F;}
+.mod-note{font-size:.82rem;color:#475569;line-height:1.45;border-top:1px solid #e2e8f0;padding-top:10px;}
+.review-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;}
+.review-card .rc-head{font-size:.78rem;font-weight:700;color:#1F4E5F;}
+.review-card .rc-q{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.4;white-space:pre-line;}
+.rc-answer{font-size:.85rem;line-height:1.4;padding:8px 10px;border-radius:8px;}
+.rc-answer .lbl{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px;}
+.rc-answer.wrong{background:var(--wrong-bg);border:1px solid var(--wrong-border);color:var(--wrong-text);}
+.rc-answer.correct{background:var(--correct-bg);border:1px solid var(--correct-border);color:var(--correct-text);}
+.rc-why{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-size:.83rem;line-height:1.45;color:#334155;}
+.rc-why .lbl{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:#64748b;margin-bottom:3px;}
+.empty-msg{background:var(--correct-bg);border:1px solid var(--correct-border);color:var(--correct-text);padding:14px;border-radius:12px;font-size:.9rem;text-align:center;line-height:1.4;}
+</style>
+</head>
+<body>
+<div class="quiz-container">
+  <div class="header">
+    <div class="header-icon">🏰</div>
+    <div class="header-info">
+      <h1>Desafio de História</h1>
+      <p>6º Ano — Sistema Anglo (Módulo 18)</p>
+      <p>20 questões • 15 de conteúdo + 5 de interpretação</p>
+    </div>
+  </div>
+
+  <div id="quiz-screen" style="display:flex;flex-direction:column;gap:14px;">
+    <div id="review-mode-tag" class="review-tag" style="display:none;">Modo revisão — apenas as questões que você errou</div>
+    <div class="progress-box">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      <div class="progress-stats">
+        <span id="question-number">Questão 1 de 20</span>
+        <span id="score-text">0 acertos</span>
+      </div>
+    </div>
+    <div class="tag" id="module-tag">Módulo</div>
+    <div class="question-text" id="question-text">Carregando pergunta...</div>
+    <div class="options-container" id="options-container"></div>
+    <div class="footer-hint-section">
+      <button class="hint-btn" id="hint-toggle-btn" onclick="toggleHint()" type="button">💡 Precisa de uma dica?</button>
+      <div class="hint-box" id="hint-box"></div>
+    </div>
+    <div class="feedback-box" id="feedback-box"></div>
+    <button class="action-btn" id="next-btn" onclick="handleNextAction()" type="button">Próxima Questão</button>
+  </div>
+
+  <div class="results-screen" id="results-screen">
+    <h2>🎉 Desafio Concluído!</h2>
+    <p id="results-sub">Você respondeu a todas as questões!</p>
+    <div class="score-circle" id="final-score">0/20<span>Acertos</span></div>
+    <p id="final-message">Excelente dedicação nos estudos!</p>
+    <div class="part-summary" id="part-summary"></div>
+    <button class="action-btn secondary" id="btn-review" onclick="showReview()" type="button">📋 Revisar meus erros</button>
+    <button class="action-btn primary-teal" id="btn-redo-errors" onclick="startReviewErrors()" type="button">🔁 Refazer só os erros</button>
+    <button class="action-btn" id="btn-full" onclick="restartQuiz()" type="button" style="display:none;">Voltar ao quiz completo</button>
+    <button class="action-btn" id="btn-restart" onclick="restartQuiz()" type="button">🔄 Reiniciar Quiz</button>
+  </div>
+
+  <div class="review-screen" id="review-screen">
+    <div>
+      <div class="review-title">Revisão dos seus erros</div>
+      <div class="review-sub" id="review-sub"></div>
+    </div>
+    <div id="module-summary-box"></div>
+    <button class="action-btn primary-teal" id="btn-redo-errors-2" onclick="startReviewErrors()" type="button">🔁 Refazer só os erros</button>
+    <div id="review-list"></div>
+    <button class="action-btn secondary" onclick="backToResults()" type="button">← Voltar ao resultado</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {module:"Feudo e feudalismo",part:1,question:"A palavra 'feudo' designava, na Idade Média, qualquer bem dado em troca de alguma outra coisa. Segundo a historiadora Yone de Carvalho, citada na apostila, o que se trocava ao receber um feudo?",options:["a) Dinheiro em moedas de ouro, pagas ao rei","b) Obediência, fidelidade e laços de dependência","c) Terras em troca de produtos agrícolas","d) Proteção militar em troca de trabalho escravo"],correct:1,hint:"Pense no que o nobre que recebia a terra precisava prometer a quem doava.",explanation:"A definição da apostila é clara: feudo era um bem cedido em troca de obediência, fidelidade e laços de dependência. As outras alternativas trocam o tipo de compromisso: não era pagamento em moedas nem troca de produtos."},
+  {module:"Feudo e feudalismo",part:1,question:"O feudalismo vigorou em parte da Europa durante a Alta Idade Média. Qual é o período indicado pela apostila?",options:["a) Do século V ao século X","b) Do século X ao século XV","c) Do século XII ao século XVIII","d) Do século I ao século V"],correct:0,hint:"A apostila marca o início com a desestruturação do reino franco.",explanation:"A apostila situa o feudalismo do século V ao século X, após a desestruturação do reino franco. As demais opções deslocam o período para fases posteriores ou anteriores."},
+  {module:"Organização do feudo",part:1,question:"A parte das terras agrícolas do feudo cuja produção pertencia exclusivamente ao senhor feudal, cultivada pelos servos em alguns dias da semana, chamava-se:",options:["a) Manso servil","b) Terras comunais","c) Manso senhorial, ou reserva","d) Aldeia"],correct:2,hint:"O nome vem de 'senhor'. É a terra que pertence a ele, não ao camponês.",explanation:"O manso senhorial, também chamado reserva, era a terra do senhor, cultivada pelos servos nos dias de corveia. O manso servil era a terra do camponês, e as terras comunais eram bosques e pastagens de uso coletivo."},
+  {module:"Organização do feudo",part:1,question:"No infográfico do funcionamento do feudo, o moinho, o forno e a oficina do ferreiro existiam para atender a quais necessidades?",options:["a) Servir de moradia para o alto clero","b) Guardar as armas do rei para invadir reinos vizinhos","c) Oferecer lazer gratuito aos camponeses","d) Moer grãos, assar alimentos e produzir ferramentas agrícolas"],correct:3,hint:"A apostila diz que as construções medievais atendiam a objetivos práticos, não estéticos.",explanation:"Cada instalação tinha uma função prática: o moinho moía cereais, o forno assava pão e a oficina forjava ferramentas e metais. As demais alternativas inventam funções que não aparecem no módulo."},
+  {module:"Castelos medievais",part:1,question:"A palavra castelo vem do latim castellum, que significa 'local fortificado'. Qual elemento do castelo funcionava como primeira linha de defesa?",options:["a) O fosso ao redor das muralhas","b) O pátio central","c) O celeiro","d) A aldeia camponesa"],correct:0,hint:"É o obstáculo que o inimigo encontra antes de chegar ao portão.",explanation:"O fosso era a primeira linha de defesa, antes das muralhas e da ponte levadiça. O pátio central tinha função de convivência e refúgio, e o celeiro servia para armazenar a colheita."},
+  {module:"Função dos grupos sociais",part:1,question:"A sociedade feudal era estamental. O que isso significa?",options:["a) Que qualquer pessoa podia subir de posição social com trabalho e estudo","b) Que a posição social vinha do nascimento e era mantida por toda a vida","c) Que os cargos eram escolhidos por votação entre os nobres","d) Que as leis garantiam igualdade de direitos entre os três grupos"],correct:1,hint:"A apostila diz que a mobilidade social era quase inexistente.",explanation:"Na sociedade estamental, a posição vinha do nascimento e passava aos descendentes, com pouquíssima mobilidade. As demais alternativas descrevem uma sociedade com mobilidade ou igualdade, o que não existia no feudalismo."},
+  {module:"Função dos grupos sociais",part:1,question:"O bispo Adalberon de Laon resumiu a sociedade medieval na frase 'uns oram, outros combatem e outros trabalham'. A qual grupo correspondia o 'outros combatem'?",options:["a) Ao clero, que defendia a fé com armas","b) Aos servos, que lutavam nas guerras do senhor","c) Aos vilões, que eram camponeses livres","d) À nobreza, que monopolizava a força das armas e a posse das terras"],correct:3,hint:"Quem tinha o monopólio das armas e considerava o trabalho manual degradante?",explanation:"O grupo que combatia era a nobreza, que detinha a força militar e a posse das terras. O clero orava, e os servos e vilões trabalhavam."},
+  {module:"Função dos grupos sociais",part:1,question:"Sobre a hierarquia do clero medieval, é correto afirmar que:",options:["a) O alto clero era formado por padres e freiras de origem camponesa","b) O papa era o pontífice máximo, e o alto clero vinha quase sempre da nobreza","c) Todos os membros do clero tinham o mesmo poder e a mesma origem","d) O baixo clero era formado por cardeais e arcebispos"],correct:1,hint:"A apostila diz que quem entrava para a Igreja vindo do campesinato pertencia ao baixo clero.",explanation:"O papa era o pontífice máximo, e bispos, cardeais e arcebispos vinham quase sempre da nobreza, formando o alto clero. Padres e freiras de origem popular formavam o baixo clero."},
+  {module:"Suserania e vassalagem",part:1,question:"Na relação de suserania e vassalagem, quais eram as obrigações de cada lado?",options:["a) O suserano doava a terra; o vassalo jurava lealdade e prestava auxílio militar","b) O suserano pagava tributos; o vassalo cobrava impostos dos servos","c) O vassalo doava a terra; o suserano trabalhava no manso servil","d) O suserano jurava obediência; o vassalo exercia a justiça no feudo"],correct:0,hint:"Quem entrega a terra está em posição superior; quem recebe, assume compromissos.",explanation:"O suserano cedia parte de suas terras e, em troca, o vassalo jurava lealdade, fidelidade e auxílio militar quando convocado. A relação ocorria entre nobres, nunca entre nobre e camponês."},
+  {module:"Suserania e vassalagem",part:1,question:"Na cerimônia de investidura, o vassalo se ajoelhava, colocava as mãos entre as do suserano e beijava-lhe as mãos. Por que essa cerimônia era tão importante na época?",options:["a) Porque marcava a entrada do nobre no clero","b) Porque garantia ao vassalo o direito de comprar sua liberdade","c) Porque, como a escrita era pouco usada, a cerimônia tornava o compromisso público diante de testemunhas","d) Porque definia qual servo trabalharia na terra doada"],correct:2,hint:"Pense no que substitui um contrato escrito quando quase ninguém escreve.",explanation:"Como a escrita era pouco usada, a cerimônia pública tornava o compromisso conhecido e obrigava seu cumprimento diante de testemunhas. Ela não envolvia clero nem servos."},
+  {module:"Servos e tributos",part:1,question:"Qual tributo consistia no trabalho gratuito do servo nas terras do manso senhorial durante alguns dias da semana?",options:["a) Talha","b) Banalidade","c) Mão-morta","d) Corveia"],correct:3,hint:"É o único tributo pago em trabalho, não em produto ou dinheiro.",explanation:"A corveia era o trabalho gratuito no manso senhorial, e tudo o que se produzia ali ficava para o senhor. A talha era entrega de parte da produção, e a banalidade era o pagamento pelo uso das instalações."},
+  {module:"Servos e tributos",part:1,question:"O servo pagava a banalidade para:",options:["a) Utilizar as instalações do feudo, como o moinho e o forno","b) Garantir que a família continuasse na terra após sua morte","c) Pagar o dízimo de 10% à Igreja Católica","d) Obter autorização para deixar o feudo"],correct:0,hint:"O nome vem de 'banal', algo de uso comum e obrigatório.",explanation:"A banalidade era o pagamento pelo uso obrigatório das instalações do senhor: moinho, forno, prensa e oficina. A mão-morta tratava da permanência da família após a morte, e o tostão de Pedro era o dízimo da Igreja."},
+  {module:"Escravidão e servidão",part:1,question:"Qual é a diferença central entre o escravizado da Roma antiga e o servo feudal?",options:["a) O servo podia ser vendido, e o escravizado não","b) O escravizado era propriedade e podia ser comprado e vendido; o servo não podia ser vendido, mas estava preso à terra","c) Ambos eram propriedades do senhor, sem nenhuma diferença jurídica","d) O servo não tinha obrigações, e o escravizado pagava tributos"],correct:1,hint:"A apostila repete que o servo não podia ser vendido nem comprado.",explanation:"O escravizado era tratado como mercadoria, podia ser comprado e vendido. O servo não podia ser comercializado, mas também não podia deixar o feudo por vontade própria: estava preso à terra e às obrigações."},
+  {module:"Mosteiros",part:1,question:"A regra beneditina 'Ora et labora' (reza e trabalha) orientava a vida nos mosteiros. Qual era o sentido do trabalho nessa regra?",options:["a) Enriquecer o mosteiro com a venda de produtos no comércio urbano","b) Punir os monges por pecados cometidos","c) Evitar a ociosidade, cultivar a humildade e garantir a autossuficiência da comunidade","d) Preparar os monges para combater nos exércitos dos nobres"],correct:2,hint:"A apostila diz que a ociosidade era considerada inimiga da alma.",explanation:"O trabalho não era castigo: servia para evitar a ociosidade, cultivar a humildade e garantir que o mosteiro produzisse o necessário para viver. As demais alternativas contrariam a filosofia monástica descrita no módulo."},
+  {module:"Tripalium",part:1,question:"A palavra 'trabalho' vem do latim tripalium. O que era o tripalium?",options:["a) Uma moeda usada no comércio entre feudos","b) Um instrumento agrícola para colher trigo","c) O nome da cerimônia de coroação dos reis francos","d) Um instrumento de tortura formado por três paus de madeira"],correct:3,hint:"Tri significa três. Palium significa paus.",explanation:"O tripalium era um instrumento de tortura de três paus, usado para amarrar escravos que seriam castigados. Por isso a ideia de trabalho ficou associada ao suplício e à dor."},
+  {module:"Interpretação — Função dos grupos sociais",part:2,question:"Leia o trecho do bispo Adalberon de Laon, do século XI:\n\n\"A casa de Deus, que se crê uma, está, pois, dividida em três: uns oram, outros combatem e outros trabalham. Estas três partes não suportam ser separadas; os serviços prestados por uma são a condição das outras duas; cada um por sua vez encarrega-se de aliviar o conjunto.\"\n\nSegundo o texto, qual afirmativa melhor define a organização da sociedade feudal?",options:["a) As desigualdades sociais são superadas pela oração e pela fé","b) As desigualdades se justificam pela reciprocidade de serviços entre as ordens","c) Aqueles que combatem são superiores aos demais membros da sociedade","d) Aquele que trabalha é superior porque sustenta toda a sociedade"],correct:1,hint:"Repare na frase 'os serviços prestados por uma são a condição das outras duas'.",explanation:"O bispo não diz que um grupo é superior: diz que as três partes não podem ser separadas e que cada uma serve às outras. A alternativa 'os que combatem são superiores' é a mais tentadora, mas o texto afirma justamente o contrário, ao falar de complementaridade."},
+  {module:"Interpretação — Suserania e vassalagem",part:2,question:"Leia este trecho de um livro do século XIII:\n\n\"Ofício de cavaleiro é manter e defender o seu senhor [...], pois nem rei, nem príncipe, nem alto barão poderão, sem ajuda, manter a justiça entre os seus vassalos. [...] E assim, é mau cavaleiro aquele que mais ajuda o povo do que ao seu senhor, ou que quer fazer-se dono e tirar os estados do seu senhor, não cumprindo com o ofício pelo qual é chamado cavaleiro.\"\n\nO trecho permite associar a cavalaria à relação entre:",options:["a) Dois nobres, sendo um deles o cavaleiro, que deve fidelidade, lealdade e auxílio militar ao seu senhor","b) Um nobre e um camponês, sendo o nobre responsável pela proteção militar","c) Dois servos, que dividiam o trabalho no manso senhorial","d) Um nobre e um membro do clero, que rezava pelo cavaleiro"],correct:0,hint:"O texto fala de vassalos e de defender o senhor, não o povo.",explanation:"O trecho trata da relação entre nobres: o cavaleiro deve fidelidade e auxílio militar ao seu senhor. A alternativa sobre proteger o povo é tentadora porque a cavalaria também tinha essa função, mas o texto diz explicitamente que é 'mau cavaleiro' quem ajuda mais o povo do que o senhor."},
+  {module:"Interpretação — Escravidão e servidão",part:2,question:"Leia:\n\n\"O servo estava vinculado à terra, e seus serviços e deveres eram herdados, transferidos ou vendidos com ela. [...] Os poderes do senhor eram limitados por costume, e, assim, os servos desfrutavam de certos direitos. Por outro lado, o escravo era uma propriedade, pura e simplesmente. Ele podia ser comprado e vendido independentemente do cônjuge [...]. Podiam ser surrados, mutilados [...] e até a morte, sem qualquer recriminação contra o dono.\"\n\nCom base no texto, é correto afirmar que:",options:["a) A condição de escravizado e de servo não passava aos descendentes","b) Na escravidão e na servidão o senhor garantia alimentação aos trabalhadores","c) Enquanto o escravizado estava preso a seu senhor, o servo estava preso à terra","d) A servidão restringia-se ao trabalho, sem afetar a vida pessoal do servo"],correct:2,hint:"O texto diz que os serviços do servo eram 'vendidos com a terra'.",explanation:"O texto mostra que o servo estava vinculado à terra, e o escravizado era propriedade do senhor. A alternativa sobre alimentação garantida é tentadora, mas o texto não afirma isso em nenhum momento."},
+  {module:"Interpretação — Servos e tributos",part:2,question:"Leia o trecho do conto medieval 'Uma terra de sonho':\n\n\"Se eles o pegarem, será dilacerado pelos cães ou, na melhor das hipóteses, enforcado por ter caçado na floresta senhorial. Executado por causa de duas lebres! Não representavam nada para seu amo, mas era um verdadeiro tesouro para sua mulher e seus dois filhos, que ele deixou na choupana em que moravam.\"\n\nPor que as duas lebres eram um tesouro para o camponês e nada para o senhor?",options:["a) Porque o camponês pretendia vendê-las e enriquecer","b) Porque o senhor tinha abundância de alimentos, e o camponês vivia com escassez","c) Porque as lebres eram animais sagrados para a Igreja","d) Porque o camponês não tinha permissão para criar animais"],correct:1,hint:"Compare a mesa do castelo com a mesa da choupana.",explanation:"As lebres complementavam a alimentação escassa de uma família camponesa, enquanto o senhor tinha abundância e não precisava delas. A alternativa sobre vender as lebres é tentadora, mas o texto fala em alimentar a mulher e os filhos."},
+  {module:"Interpretação — Organização do feudo",part:2,question:"Um viajante chega a um feudo do século XI e observa: dentro das muralhas, o senhor aplica a lei, cobra tributos e julga conflitos; fora delas, camponeses cultivam a terra e entregam parte da colheita. O rei do reino existe, mas não interfere nas decisões do senhor.\n\nEssa situação ilustra qual característica do feudalismo?",options:["a) A centralização do poder político nas mãos do rei","b) A ausência de qualquer forma de autoridade no campo","c) A igualdade jurídica entre senhores e camponeses","d) A descentralização política, com cada feudo funcionando como unidade praticamente autônoma"],correct:3,hint:"O rei existe, mas não manda dentro do feudo. Onde está o poder, então?",explanation:"O poder estava descentralizado: cada feudo tinha suas próprias leis, regras e autoridade, e o rei não conseguia interferir. A alternativa sobre centralização é tentadora porque o rei existia, mas o texto mostra que ele não exercia poder efetivo sobre os nobres."}
+];
+
+const CATEGORIES = ["Feudo e feudalismo","Organização do feudo","Castelos medievais","Função dos grupos sociais","Suserania e vassalagem","Servos e tributos","Escravidão e servidão","Mosteiros","Tripalium","Interpretação"];
+
+let activeQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let userAnswers = [];
+let isReviewMode = false;
+
+const $ = id => document.getElementById(id);
+
+function startFullQuiz(){
+  activeQuestions = questions.slice();
+  isReviewMode = false;
+  currentIndex = 0; score = 0; answered = false;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  $("review-mode-tag").style.display = "none";
+  $("btn-full").style.display = "none";
+  $("results-screen").style.display = "none";
+  $("review-screen").style.display = "none";
+  $("quiz-screen").style.display = "flex";
+  loadQuestion();
+}
+
+function startReviewErrors(){
+  const errs = getErrors();
+  if(errs.length === 0){ return; }
+  activeQuestions = errs.map(e => e.q);
+  isReviewMode = true;
+  currentIndex = 0; score = 0; answered = false;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  $("review-mode-tag").style.display = "inline-block";
+  $("btn-full").style.display = "block";
+  $("results-screen").style.display = "none";
+  $("review-screen").style.display = "none";
+  $("quiz-screen").style.display = "flex";
+  loadQuestion();
+}
+
+function restartQuiz(){ startFullQuiz(); }
+
+function loadQuestion(){
+  const q = activeQuestions[currentIndex];
+  answered = false;
+  $("progress-fill").style.width = ((currentIndex)/activeQuestions.length*100) + "%";
+  $("question-number").textContent = "Questão " + (currentIndex+1) + " de " + activeQuestions.length;
+  $("score-text").textContent = score + (score === 1 ? " acerto" : " acertos");
+  $("module-tag").textContent = q.module;
+  $("question-text").textContent = q.question;
+  $("hint-box").style.display = "none";
+  $("hint-box").textContent = q.hint;
+  $("hint-toggle-btn").style.display = "inline-block";
+  $("feedback-box").style.display = "none";
+  $("feedback-box").className = "feedback-box";
+  $("next-btn").textContent = currentIndex === activeQuestions.length - 1 ? "Ver Resultado" : "Próxima Questão";
+  $("next-btn").disabled = true;
+  renderOptions(q);
+}
+
+function renderOptions(q){
+  const box = $("options-container");
+  box.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.type = "button";
+    btn.textContent = opt;
+    btn.onclick = () => selectOption(i);
+    box.appendChild(btn);
+  });
+}
+
+function toggleHint(){
+  const hb = $("hint-box");
+  hb.style.display = hb.style.display === "block" ? "none" : "block";
+}
+
+function selectOption(sel){
+  if(answered) return;
+  answered = true;
+  const q = activeQuestions[currentIndex];
+  userAnswers[currentIndex] = sel;
+  const btns = $("options-container").children;
+  const isCorrect = sel === q.correct;
+  if(isCorrect) score++;
+  btns[q.correct].classList.add("correct");
+  if(!isCorrect) btns[sel].classList.add("wrong");
+  Array.from(btns).forEach(b => b.disabled = true);
+  const fb = $("feedback-box");
+  fb.style.display = "block";
+  fb.className = "feedback-box " + (isCorrect ? "correct" : "wrong");
+  fb.innerHTML = (isCorrect ? "<strong>✅ Correto!</strong>" : "<strong>❌ Não foi dessa vez.</strong>") + q.explanation;
+  $("score-text").textContent = score + (score === 1 ? " acerto" : " acertos");
+  $("hint-toggle-btn").style.display = "none";
+  $("hint-box").style.display = "none";
+  $("next-btn").disabled = false;
+}
+
+function handleNextAction(){
+  if(!answered) return;
+  if(currentIndex < activeQuestions.length - 1){
+    currentIndex++;
+    loadQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function getErrors(){
+  const list = [];
+  const source = isReviewMode ? activeQuestions : questions;
+  if(!isReviewMode){
+    questions.forEach((q, i) => {
+      const ans = lastAnswers[i];
+      if(ans !== undefined && ans !== null && ans !== q.correct) list.push({q, idx:i, sel:ans});
+    });
+  } else {
+    activeQuestions.forEach((q, i) => {
+      const ans = userAnswers[i];
+      if(ans !== null && ans !== q.correct) list.push({q, idx:i, sel:ans});
+    });
+  }
+  return list;
+}
+
+let lastAnswers = new Array(questions.length).fill(null);
+
+function recordAnswers(){
+  if(!isReviewMode){
+    activeQuestions.forEach((q, i) => {
+      const idx = questions.indexOf(q);
+      if(userAnswers[i] !== null) lastAnswers[idx] = userAnswers[i];
+    });
+  } else {
+    activeQuestions.forEach((q, i) => {
+      const idx = questions.indexOf(q);
+      if(userAnswers[i] !== null) lastAnswers[idx] = userAnswers[i];
+    });
+  }
+}
+
+function categoryOf(module){
+  if(module.startsWith("Interpretação")) return "Interpretação";
+  return CATEGORIES.find(c => module.startsWith(c)) || module;
+}
+
+function showResults(){
+  recordAnswers();
+  $("quiz-screen").style.display = "none";
+  $("results-screen").style.display = "flex";
+  $("review-screen").style.display = "none";
+  $("progress-fill").style.width = "100%";
+
+  const total = isReviewMode ? activeQuestions.length : questions.length;
+  const pct = total ? score / total : 0;
+  let msg;
+  if(pct >= 0.85) msg = "🏆 Sensacional! Você demonstrou domínio total sobre o Feudalismo!";
+  else if(pct >= 0.65) msg = "👏 Muito bom! Você está super preparado para a prova de História!";
+  else if(pct >= 0.45) msg = "📚 Bom esforço! Vale revisar os pontos em que errou e tentar novamente.";
+  else msg = "💪 Não desanime! Revise o material com carinho e faça o quiz de novo.";
+
+  $("results-sub").textContent = isReviewMode ? "Você refez apenas as questões que errou." : "Você respondeu a todas as questões!";
+  $("final-score").innerHTML = score + "/" + total + "<span>Acertos</span>";
+  $("final-message").textContent = msg;
+
+  const contentQs = questions.filter(q => q.part === 1);
+  const interpQs = questions.filter(q => q.part === 2);
+  const contentScore = contentQs.filter(q => lastAnswers[questions.indexOf(q)] === q.correct).length;
+  const interpScore = interpQs.filter(q => lastAnswers[questions.indexOf(q)] === q.correct).length;
+  $("part-summary").innerHTML =
+    "<strong>Parte 1 — Conteúdo:</strong> " + contentScore + "/" + contentQs.length + " acertos<br>" +
+    "<strong>Parte 2 — Interpretação:</strong> " + interpScore + "/" + interpQs.length + " acertos<br><br>" +
+    "Desempenho menor na Parte 2 indica necessidade de treinar leitura de texto e fonte histórica, não de decorar mais conteúdo.";
+
+  const errs = getErrors();
+  $("btn-redo-errors").style.display = errs.length ? "block" : "none";
+  $("btn-review").style.display = errs.length ? "block" : "none";
+}
+
+function buildCategoryCounts(errs){
+  const counts = {};
+  CATEGORIES.forEach(c => counts[c] = 0);
+  errs.forEach(e => { counts[categoryOf(e.q.module)]++; });
+  return counts;
+}
+
+function showReview(){
+  const errs = getErrors();
+  $("results-screen").style.display = "none";
+  $("review-screen").style.display = "flex";
+  $("review-sub").textContent = errs.length
+    ? errs.length + (errs.length === 1 ? " questão errada" : " questões erradas") + " para revisar."
+    : "Nenhum erro registrado.";
+
+  const summaryBox = $("module-summary-box");
+  summaryBox.innerHTML = "";
+  if(errs.length === 0){
+    summaryBox.innerHTML = '<div class="empty-msg">Você não errou nenhuma questão. Excelente!</div>';
+  } else {
+    const counts = buildCategoryCounts(errs);
+    const sorted = CATEGORIES.filter(c => counts[c] > 0).sort((a,b) => counts[b]-counts[a]);
+    const max = counts[sorted[0]];
+    const topCat = sorted[0];
+    let note;
+    if(errs.length <= 2) note = "Foram poucos erros. Revise estes pontos e você está pronto.";
+    else if(topCat === "Interpretação") note = "Seu maior ponto de atenção é interpretação de texto e fonte histórica. Vale reler as questões com calma antes de responder.";
+    else note = "Seu maior ponto de atenção é " + topCat.toLowerCase() + ". Vale revisar esse conteúdo antes da prova.";
+
+    let rows = sorted.map(c => {
+      const pct = Math.round(counts[c] / max * 100);
+      return '<div class="mod-row"><div class="mod-row-head"><span>' + c + '</span><span class="badge">' + counts[c] + (counts[c]===1?' erro':' erros') + '</span></div><div class="mod-bar-bg"><div class="mod-bar-fill' + (c===topCat?' top':'') + '" style="width:' + pct + '%"></div></div></div>';
+    }).join("");
+
+    summaryBox.innerHTML = '<div class="module-summary"><h3>Onde você errou mais</h3>' + rows + '<div class="mod-note">' + note + '</div></div>';
+  }
+
+  const list = $("review-list");
+  list.innerHTML = "";
+  errs.forEach((e, n) => {
+    const card = document.createElement("div");
+    card.className = "review-card";
+    card.innerHTML =
+      '<div class="rc-head">Questão ' + (questions.indexOf(e.q)+1) + ' • ' + e.q.module + '</div>' +
+      '<div class="rc-q">' + e.q.question + '</div>' +
+      '<div class="rc-answer wrong"><span class="lbl">Sua resposta</span>' + e.q.options[e.sel] + '</div>' +
+      '<div class="rc-answer correct"><span class="lbl">Resposta correta</span>' + e.q.options[e.q.correct] + '</div>' +
+      '<div class="rc-why"><span class="lbl">Por que</span>' + e.q.explanation + '</div>';
+    list.appendChild(card);
+  });
+}
+
+function backToResults(){
+  $("review-screen").style.display = "none";
+  $("results-screen").style.display = "flex";
+}
+
+startFullQuiz();
+</script>
+</body>
+</html>
